@@ -1,0 +1,107 @@
+{
+  "_comment": "Exec Approvals — Allowlist for OpenClaw agent shell commands. Commands matching a pattern are auto-allowed; everything else requires user approval. Use 'on-miss' mode for best balance of security and usability.",
+  "mode": "on-miss",
+  "rules": [
+    {
+      "pattern": "^(cat|head|tail|less|more)\\b",
+      "action": "allow",
+      "comment": "Read file contents (safe, read-only)"
+    },
+    {
+      "pattern": "^(ls|find|stat|file|du|df|wc|which|type|uname|whoami|id|date|pwd)\\b",
+      "action": "allow",
+      "comment": "System inspection commands (read-only)"
+    },
+    {
+      "pattern": "^(grep|rg|ag|sed|awk|sort|uniq|tr|cut|paste|tee)\\b",
+      "action": "allow",
+      "comment": "Text processing (safe for pipelines)"
+    },
+    {
+      "pattern": "^(echo|printf|true|false|test|\\[)\\b",
+      "action": "allow",
+      "comment": "Shell builtins"
+    },
+    {
+      "pattern": "^(mkdir|touch|cp|mv)\\b",
+      "action": "allow",
+      "comment": "File operations (non-destructive)"
+    },
+    {
+      "pattern": "^(python3?|node|deno)\\b",
+      "action": "allow",
+      "comment": "Script runtimes (sandboxed by Docker)"
+    },
+    {
+      "pattern": "^jq\\b",
+      "action": "allow",
+      "comment": "JSON processing"
+    },
+    {
+      "pattern": "^ffmpeg\\b",
+      "action": "allow",
+      "comment": "Media conversion (TTS output, audio processing)"
+    },
+    {
+      "pattern": "^(lame|sox)\\b",
+      "action": "allow",
+      "comment": "Audio encoding"
+    },
+    {
+      "pattern": "^piper\\b",
+      "action": "allow",
+      "comment": "Local text-to-speech"
+    },
+    {
+      "pattern": "^ollama\\b",
+      "action": "allow",
+      "comment": "Local LLM inference"
+    },
+    {
+      "pattern": "^pandoc\\b",
+      "action": "allow",
+      "comment": "Document conversion"
+    },
+    {
+      "pattern": "^himalaya\\b",
+      "action": "allow",
+      "comment": "Email CLI (IMAP/SMTP)"
+    },
+    {
+      "pattern": "^shasum\\b",
+      "action": "allow",
+      "comment": "Checksum verification"
+    },
+    {
+      "pattern": "^(trash|trash-put)\\b",
+      "action": "allow",
+      "comment": "Safe deletion (moves to trash, not permanent)"
+    },
+    {
+      "_comment": "=== DANGEROUS — Never auto-allow these ===",
+      "pattern": "^(curl|wget|fetch)\\b",
+      "action": "deny",
+      "comment": "BLOCKED: Use safe_curl.sh wrapper instead"
+    },
+    {
+      "pattern": "^security\\b",
+      "action": "deny",
+      "comment": "BLOCKED: Keychain access requires explicit approval"
+    },
+    {
+      "pattern": "^(sudo|su|doas)\\b",
+      "action": "deny",
+      "comment": "BLOCKED: Privilege escalation"
+    },
+    {
+      "pattern": "^(ssh|scp|sftp)\\b",
+      "action": "deny",
+      "comment": "BLOCKED: Remote access"
+    },
+    {
+      "pattern": "^rm\\s+-rf",
+      "action": "deny",
+      "comment": "BLOCKED: Recursive forced deletion (use trash instead)"
+    }
+  ]
+}
